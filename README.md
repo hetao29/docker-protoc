@@ -20,13 +20,6 @@ make doc
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-test:
-	sudo docker run hetao29/docker-protoc:latest protoc -h
-build:
-	sudo docker build . -t hetao29/docker-protoc:latest
-push:
-	sudo docker push -a hetao29/docker-protoc
-
 go:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
 		--grpc-gateway_out=logtostderr=true:test/out/go \
