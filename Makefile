@@ -29,6 +29,16 @@ dart:
 		--proto_path=. \
 		--dart_out=grpc:test/out/dart \
 		"{}"
+
+java:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+        --plugin=protoc-gen-grpc-java=/usr/bin/protoc-gen-grpc-java \
+        --java_out=test/out/java \
+        --grpc-java_out=test/out/java \
+		"{}"
+
 doc:
 	#https://github.com/pseudomuto/protoc-gen-doc
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest  protoc \
