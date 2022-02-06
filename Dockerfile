@@ -27,6 +27,11 @@ RUN go install github.com/hetao29/php-grpc-server-protobuf-plugin@latest
 RUN curl https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.43.2/protoc-gen-grpc-java-1.43.2-linux-x86_64.exe > /usr/bin/protoc-gen-grpc-java
 RUN chmod 755 /usr/bin/protoc-gen-grpc-java
 
+#proto web
+#https://github.com/grpc/grpc-web
+RUN curl -L https://github.com/grpc/grpc-web/releases/download/1.3.1/protoc-gen-grpc-web-1.3.1-linux-x86_64 > /usr/bin/protoc-gen-grpc-web
+RUN chmod 755 /usr/bin/protoc-gen-grpc-web
+
 #link
 RUN ln -s -f /root/go/bin/protoc-gen-doc /usr/bin/protoc-gen-doc
 RUN ln -s -f /root/go/bin/php-grpc-server-protobuf-plugin /usr/bin/php-grpc-server-protobuf-plugin

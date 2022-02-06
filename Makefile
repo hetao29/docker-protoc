@@ -53,6 +53,14 @@ js:
 		--js_out=test/out/js \
 		--grpc_out=test/out/js \
 		"{}"
+web:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_node_plugin \
+		--js_out=import_style=commonjs:test/out/web \
+		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:test/out/web \
+		"{}"
 oc:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
 		--proto_path=test/proto \

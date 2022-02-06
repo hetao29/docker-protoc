@@ -7,12 +7,13 @@ protoc gen 10 languages protobuf and grpc plugin
 2. php
 3. dart
 4. java
-5. cpp
-6. csharp(c#)
+5. c++(cpp)
+6. c#(csharp)
 7. js
-8. oc(object c)
+8. oc(Objective-C)
 9. python
 10. ruby
+11. web
 
 ## usage
 
@@ -28,6 +29,7 @@ make js
 make oc
 make python
 make ruty
+make web
 
 ```
 ```bash
