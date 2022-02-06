@@ -14,6 +14,7 @@ protoc gen 10 languages protobuf and grpc plugin codes.
 9. python
 10. ruby
 11. web
+12. kotlin
 
 ## usage
 
@@ -30,6 +31,7 @@ make oc
 make python
 make ruty
 make web
+make kotlin
 
 ```
 ```bash

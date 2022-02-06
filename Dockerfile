@@ -32,6 +32,13 @@ RUN chmod 755 /usr/bin/protoc-gen-grpc-java
 RUN curl -L https://github.com/grpc/grpc-web/releases/download/1.3.1/protoc-gen-grpc-web-1.3.1-linux-x86_64 > /usr/bin/protoc-gen-grpc-web
 RUN chmod 755 /usr/bin/protoc-gen-grpc-web
 
+#proto kotlin
+#https://github.com/grpc/grpc-kotlin/tree/master/compiler
+RUN apt-get update && apt-get install -y default-jre
+RUN curl  https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-kotlin/1.2.1/protoc-gen-grpc-kotlin-1.2.1-jdk7.jar > /usr/bin/protoc-gen-grpc-kotlin-1.2.1-jdk7.jar
+COPY bin/* /usr/bin/
+RUN chmod 755 /usr/bin/protoc-gen-grpc-kotlin.sh
+
 #link
 RUN ln -s -f /root/go/bin/protoc-gen-doc /usr/bin/protoc-gen-doc
 RUN ln -s -f /root/go/bin/php-grpc-server-protobuf-plugin /usr/bin/php-grpc-server-protobuf-plugin

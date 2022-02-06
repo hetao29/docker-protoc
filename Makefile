@@ -95,6 +95,16 @@ java:
         --grpc-java_out=test/out/java \
 		"{}"
 
+kotlin:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpckt=/usr/bin/protoc-gen-grpc-kotlin.sh \
+		--java_out=test/out/kotlin \
+		--grpckt_out=test/out/kotlin \
+		"{}"
+
+
 doc:
 	#https://github.com/pseudomuto/protoc-gen-doc
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest  protoc \
