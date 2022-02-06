@@ -1,18 +1,36 @@
 # docker-protoc
 
+protoc gen 10 languages protobuf and grpc plugin
+
 ## protoc support language
-1. golang
+1. go(golang)
 2. php
 3. dart
 4. java
+5. cpp
+6. csharp(c#)
+7. js
+8. oc(object c)
+9. python
+10. ruby
 
 ## usage
 
 ```bash
-make php
 make go
+make php
 make dart
 make java
+
+make cpp
+make csharp
+make js
+make oc
+make python
+make ruty
+
+```
+```bash
 make doc
 ```
 

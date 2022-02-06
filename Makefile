@@ -29,6 +29,54 @@ dart:
 		--proto_path=. \
 		--dart_out=grpc:test/out/dart \
 		"{}"
+cpp:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_cpp_plugin \
+		--cpp_out=test/out/cpp \
+		--grpc_out=test/out/cpp \
+		"{}"
+csharp:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_csharp_plugin \
+		--csharp_out=test/out/csharp \
+		--grpc_out=test/out/csharp \
+		"{}"
+js:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_node_plugin \
+		--js_out=test/out/js \
+		--grpc_out=test/out/js \
+		"{}"
+oc:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_objective_c_plugin \
+		--objc_out=test/out/oc \
+		--grpc_out=test/out/oc \
+		"{}"
+python:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_python_plugin \
+		--python_out=test/out/python \
+		--grpc_out=test/out/python \
+		"{}"
+ruby:
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--proto_path=test/proto \
+		--proto_path=. \
+		--plugin=protoc-gen-grpc=/usr/bin/grpc_ruby_plugin \
+		--ruby_out=test/out/ruby \
+		--grpc_out=test/out/ruby \
+		"{}"
 
 java:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
