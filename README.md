@@ -1,6 +1,6 @@
 # docker-protoc
 
-protoc gen 10 languages protobuf and grpc plugin
+protoc gen 10 languages protobuf and grpc plugin codes.
 
 ## protoc support language
 1. go(golang)
