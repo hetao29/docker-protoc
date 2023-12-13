@@ -9,14 +9,14 @@ module Test
     # The greeting service definition.
     class Service
 
-      include GRPC::GenericService
+      include ::GRPC::GenericService
 
       self.marshal_class_method = :encode
       self.unmarshal_class_method = :decode
       self.service_name = 'test.Greeter'
 
       # Sends a greeting
-      rpc :SayHello, Test::HelloRequest, Test::HelloReply
+      rpc :SayHello, ::Test::HelloRequest, ::Test::HelloReply
     end
 
     Stub = Service.rpc_stub_class

@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-java -jar /usr/bin/protoc-gen-grpc-kotlin-1.3.1-jdk8.jar
+java -jar /usr/bin/protoc-gen-grpc-kotlin-1.4.0-jdk8.jar

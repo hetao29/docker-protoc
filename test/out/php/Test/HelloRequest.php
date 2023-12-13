@@ -16,9 +16,9 @@ use Google\Protobuf\Internal\GPBUtil;
 class HelloRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string name = 1;</code>
+     * Generated from protobuf field <code>optional string name = 1;</code>
      */
-    protected $name = '';
+    protected $name = null;
 
     /**
      * Constructor.
@@ -35,16 +35,26 @@ class HelloRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string name = 1;</code>
+     * Generated from protobuf field <code>optional string name = 1;</code>
      * @return string
      */
     public function getName()
     {
-        return $this->name;
+        return isset($this->name) ? $this->name : '';
+    }
+
+    public function hasName()
+    {
+        return isset($this->name);
+    }
+
+    public function clearName()
+    {
+        unset($this->name);
     }
 
     /**
-     * Generated from protobuf field <code>string name = 1;</code>
+     * Generated from protobuf field <code>optional string name = 1;</code>
      * @param string $var
      * @return $this
      */

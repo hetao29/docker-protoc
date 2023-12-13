@@ -10,7 +10,7 @@ push:
 go:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
 		--grpc-gateway_out=logtostderr=true:test/out/go \
-		--plugin=proto-google-common-protos --go_out=plugins=grpc:test/out/go \
+		--plugin=proto-google-common-protos --go-grpc_out=test/out/go \
 		-I test/proto/ -I . \
 		"{}"
 php:
@@ -19,8 +19,8 @@ php:
 		--plugin=protoc-gen-grpc=/usr/bin/grpc_php_plugin --grpc_out=test/out/php --php_out=test/out/php -I test/proto/ -I . \
 		"{}"
 	#生成服务端interface
-	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
-		--plugin=protoc-gen-grpc=/usr/bin/php-grpc-server-protobuf-plugin --grpc_out=test/out/php --php_out=test/out/php -I test/proto/ -I . \
+	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -v /tmp:/tmp -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
+		--plugin=protoc-gen-grpc=protoc-gen-php-grpc --grpc_out=test/out/php --php_out=test/out/php -I test/proto/ -I . \
 		"{}"
 
 dart:
@@ -49,25 +49,16 @@ js:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
 		--proto_path=test/proto \
 		--proto_path=. \
-		--plugin=protoc-gen-grpc=/usr/bin/grpc_node_plugin \
+		--plugin=protoc-gen-grpc=/usr/bin/protoc-gen-js \
 		--js_out=test/out/js \
-		--grpc_out=test/out/js \
 		"{}"
 web:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
 		--proto_path=test/proto \
 		--proto_path=. \
-		--plugin=protoc-gen-grpc=/usr/bin/grpc_node_plugin \
+		--plugin=protoc-gen-grpc=/usr/bin/protoc-gen-grpc-web \
 		--js_out=import_style=commonjs:test/out/web \
 		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:test/out/web \
-		"{}"
-oc:
-	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
-		--proto_path=test/proto \
-		--proto_path=. \
-		--plugin=protoc-gen-grpc=/usr/bin/grpc_objective_c_plugin \
-		--objc_out=test/out/oc \
-		--grpc_out=test/out/oc \
 		"{}"
 python:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \

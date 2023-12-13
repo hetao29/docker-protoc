@@ -3,24 +3,24 @@
 
 ## Table of Contents
 
-- [helloworld.proto](#helloworld.proto)
-    - [HelloReply](#test.HelloReply)
-    - [HelloRequest](#test.HelloRequest)
+- [helloworld.proto](#helloworld-proto)
+    - [HelloReply](#test-HelloReply)
+    - [HelloRequest](#test-HelloRequest)
   
-    - [Greeter](#test.Greeter)
+    - [Greeter](#test-Greeter)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="helloworld.proto"></a>
+<a name="helloworld-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
 ## helloworld.proto
 
 
 
-<a name="test.HelloReply"></a>
+<a name="test-HelloReply"></a>
 
 ### HelloReply
 The response message containing the greetings
@@ -35,7 +35,7 @@ The response message containing the greetings
 
 
 
-<a name="test.HelloRequest"></a>
+<a name="test-HelloRequest"></a>
 
 ### HelloRequest
 The request message containing the user&#39;s name.
@@ -43,7 +43,7 @@ The request message containing the user&#39;s name.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
+| name | [string](#string) | optional |  |
 
 
 
@@ -56,14 +56,14 @@ The request message containing the user&#39;s name.
  
 
 
-<a name="test.Greeter"></a>
+<a name="test-Greeter"></a>
 
 ### Greeter
 The greeting service definition.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| SayHello | [HelloRequest](#test.HelloRequest) | [HelloReply](#test.HelloReply) | Sends a greeting |
+| SayHello | [HelloRequest](#test-HelloRequest) | [HelloReply](#test-HelloReply) | Sends a greeting |
 
  
 
