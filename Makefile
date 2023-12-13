@@ -20,7 +20,7 @@ php:
 		"{}"
 	#生成服务端interface
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -v /tmp:/tmp -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
-		--plugin=protoc-gen-grpc=protoc-gen-php-grpc --grpc_out=test/out/php --php_out=test/out/php -I test/proto/ -I . \
+		--plugin=protoc-gen-grpc=/usr/bin/protoc-gen-php-grpc --grpc_out=test/out/php --php_out=test/out/php -I test/proto/ -I . \
 		"{}"
 
 dart:
@@ -36,14 +36,6 @@ cpp:
 		--plugin=protoc-gen-grpc=/usr/bin/grpc_cpp_plugin \
 		--cpp_out=test/out/cpp \
 		--grpc_out=test/out/cpp \
-		"{}"
-csharp:
-	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
-		--proto_path=test/proto \
-		--proto_path=. \
-		--plugin=protoc-gen-grpc=/usr/bin/grpc_csharp_plugin \
-		--csharp_out=test/out/csharp \
-		--grpc_out=test/out/csharp \
 		"{}"
 js:
 	find test/proto -name "*.proto" | xargs -I {} sudo docker run --rm -v ${ROOT_DIR}:${ROOT_DIR} -w ${ROOT_DIR} hetao29/docker-protoc:latest protoc \
@@ -94,7 +86,6 @@ kotlin:
 		--java_out=test/out/kotlin \
 		--grpckt_out=test/out/kotlin \
 		"{}"
-
 
 doc:
 	#https://github.com/pseudomuto/protoc-gen-doc
