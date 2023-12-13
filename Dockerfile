@@ -57,9 +57,8 @@ COPY bin/protoc-gen-grpc-web-1.5.0-linux-x86_64 /usr/bin/protoc-gen-grpc-web
 COPY bin/protoc-gen-js /usr/bin/
 
 #proto php server
-#https://github.com/roadrunner-server/roadrunner/releases
-#RUN wget https://github.com/roadrunner-server/roadrunner/releases/download/v2023.3.7/protoc-gen-php-grpc-2023.3.7-linux-amd64.tar.gz
-#RUN tar xzf protoc-gen-php-grpc-2023.3.7-linux-amd64.tar.gz
-#RUN mv protoc-gen-php-grpc-2023.3.7-linux-amd64/protoc-gen-php-grpc /usr/bin
+#https://github.com/hetao29/php-grpc-server-protobuf-plugin
+#RUN wget https://github.com/hetao29/php-grpc-server-protobuf-plugin/raw/main/php-grpc-server-protobuf-plugin
+#RUN mv php-grpc-server-protobuf-plugin /usr/bin/protoc-gen-php-grpc
 COPY bin/protoc-gen-php-grpc /usr/bin/
 
