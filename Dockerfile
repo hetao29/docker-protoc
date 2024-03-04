@@ -26,6 +26,8 @@ COPY linux_signing_key.pub /tmp/
 RUN sh -c 'cat /tmp/linux_signing_key.pub | apt-key add -'
 RUN sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
 RUN apt-get update && apt-get install -y dart
+ENV PUB_HOSTED_URL=https://pub.flutter-io.cn
+ENV FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 RUN dart pub global activate protoc_plugin
 RUN ln -s -f /root/.pub-cache/bin/protoc-gen-dart /usr/bin/protoc-gen-dart
 
