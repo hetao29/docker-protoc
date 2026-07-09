@@ -1,9 +1,9 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 LABEL maintainer="Hetao<hetao@hetao.name>"
 ENV DEBIAN_FRONTEND noninteractive
 ENV GOPROXY=https://goproxy.cn,direct
 RUN apt-get update 
-RUN apt-get install -y gnupg2 tree tar curl wget git protobuf-compiler protobuf-compiler-grpc npm golang default-jre protobuf-compiler-grpc
+RUN apt-get install -y gnupg2 tree tar curl wget git protobuf-compiler protobuf-compiler-grpc npm golang default-jre protobuf-compiler-grpc apt-transport-https
 
 #https://github.com/grpc-ecosystem/grpc-gateway
 #proto doc php server grpc
@@ -22,9 +22,10 @@ RUN ln -s -f /root/go/bin/protoc-gen-doc /usr/bin/protoc-gen-doc
 
 #dart protoc
 #https://grpc.io/docs/languages/dart/quickstart/
+COPY dart_stable.list /etc/apt/sources.list.d/dart_stable.list
 COPY linux_signing_key.pub /tmp/
-RUN sh -c 'cat /tmp/linux_signing_key.pub | apt-key add -'
-RUN sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+RUN sh -c 'cat /tmp/linux_signing_key.pub | gpg  --dearmor -o /usr/share/keyrings/dart.gpg'
+#RUN sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
 RUN apt-get update && apt-get install -y dart
 ENV PUB_HOSTED_URL=https://pub.flutter-io.cn
 ENV FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
