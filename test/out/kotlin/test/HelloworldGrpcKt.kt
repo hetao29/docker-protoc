@@ -44,13 +44,11 @@ public object GreeterGrpcKt {
     channel: Channel,
     callOptions: CallOptions = DEFAULT,
   ) : AbstractCoroutineStub<GreeterCoroutineStub>(channel, callOptions) {
-    override fun build(channel: Channel, callOptions: CallOptions): GreeterCoroutineStub =
-        GreeterCoroutineStub(channel, callOptions)
+    override fun build(channel: Channel, callOptions: CallOptions): GreeterCoroutineStub = GreeterCoroutineStub(channel, callOptions)
 
     /**
      * Executes this RPC and returns the response message, suspending until the RPC completes
-     * with [`Status.OK`][io.grpc.Status].  If the RPC completes with another status, a
-     * corresponding
+     * with [`Status.OK`][io.grpc.Status].  If the RPC completes with another status, a corresponding
      * [StatusException] is thrown.  If this coroutine is cancelled, the RPC is also cancelled
      * with the corresponding exception as a cause.
      *
@@ -60,8 +58,7 @@ public object GreeterGrpcKt {
      *
      * @return The single response from the server.
      */
-    public suspend fun sayHello(request: Helloworld.HelloRequest, headers: Metadata = Metadata()):
-        Helloworld.HelloReply = unaryRpc(
+    public suspend fun sayHello(request: Helloworld.HelloRequest, headers: Metadata = Metadata()): Helloworld.HelloReply = unaryRpc(
       channel,
       GreeterGrpc.getSayHelloMethod(),
       request,
@@ -80,16 +77,13 @@ public object GreeterGrpcKt {
      * Returns the response to an RPC for test.Greeter.SayHello.
      *
      * If this method fails with a [StatusException], the RPC will fail with the corresponding
-     * [io.grpc.Status].  If this method fails with a [java.util.concurrent.CancellationException],
-     * the RPC will fail
+     * [io.grpc.Status].  If this method fails with a [java.util.concurrent.CancellationException], the RPC will fail
      * with status `Status.CANCELLED`.  If this method fails for any other reason, the RPC will
      * fail with `Status.UNKNOWN` with the exception as a cause.
      *
      * @param request The request from the client.
      */
-    public open suspend fun sayHello(request: Helloworld.HelloRequest): Helloworld.HelloReply =
-        throw
-        StatusException(UNIMPLEMENTED.withDescription("Method test.Greeter.SayHello is unimplemented"))
+    public open suspend fun sayHello(request: Helloworld.HelloRequest): Helloworld.HelloReply = throw StatusException(UNIMPLEMENTED.withDescription("Method test.Greeter.SayHello is unimplemented"))
 
     final override fun bindService(): ServerServiceDefinition = builder(getServiceDescriptor())
       .addMethod(unaryServerMethodDefinition(

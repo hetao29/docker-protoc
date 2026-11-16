@@ -1,0 +1,15 @@
+{
+  "name": "docker-protoc-typescript-smoke",
+  "private": true,
+  "scripts": {
+    "test": "tsc --noEmit && node runtime.cjs"
+  },
+  "dependencies": {
+    "google-protobuf": "4.0.3",
+    "grpc-web": "2.1.1"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "3.15.12",
+    "typescript": "7.0.2"
+  }
+}

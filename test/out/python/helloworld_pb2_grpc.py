@@ -5,7 +5,7 @@ import grpc
 import helloworld_pb2 as helloworld__pb2
 
 
-class GreeterStub(object):
+class GreeterStub:
     """The greeting service definition.
     """
 
@@ -19,10 +19,10 @@ class GreeterStub(object):
                 '/test.Greeter/SayHello',
                 request_serializer=helloworld__pb2.HelloRequest.SerializeToString,
                 response_deserializer=helloworld__pb2.HelloReply.FromString,
-                )
+                _registered_method=True)
 
 
-class GreeterServicer(object):
+class GreeterServicer:
     """The greeting service definition.
     """
 
@@ -45,10 +45,11 @@ def add_GreeterServicer_to_server(servicer, server):
     generic_handler = grpc.method_handlers_generic_handler(
             'test.Greeter', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('test.Greeter', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class Greeter(object):
+class Greeter:
     """The greeting service definition.
     """
 
@@ -63,8 +64,18 @@ class Greeter(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/test.Greeter/SayHello',
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/test.Greeter/SayHello',
             helloworld__pb2.HelloRequest.SerializeToString,
             helloworld__pb2.HelloReply.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)

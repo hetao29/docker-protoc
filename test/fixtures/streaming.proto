@@ -1,0 +1,20 @@
+syntax = "proto2";
+package compatibility;
+
+message StreamRequest {
+  message Payload {
+    optional string value = 1;
+  }
+  optional Payload payload = 1;
+}
+
+message StreamReply {
+  optional string value = 1;
+}
+
+service Streaming {
+  rpc Unary(StreamRequest.Payload) returns (StreamReply);
+  rpc Upload(stream StreamRequest) returns (StreamReply);
+  rpc Download(StreamRequest) returns (stream StreamReply);
+  rpc Chat(stream StreamRequest) returns (stream StreamReply);
+}

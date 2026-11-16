@@ -1,0 +1,13 @@
+const assert = require('node:assert/strict');
+const { HelloRequest, HelloReply } = require('./generated/helloworld_pb.js');
+const request = new HelloRequest();
+request.setName('toolchain-upgrade');
+const restored = HelloRequest.deserializeBinary(request.serializeBinary());
+assert.equal(restored.getName(), 'toolchain-upgrade');
+assert.equal(restored.hasName(), true);
+restored.clearName();
+assert.equal(restored.hasName(), false);
+const reply = new HelloReply();
+reply.setMessage('hello');
+assert.equal(HelloReply.deserializeBinary(reply.serializeBinary()).getMessage(), 'hello');
+console.log('JS binary round trips and optional presence passed.');

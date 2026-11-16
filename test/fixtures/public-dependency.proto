@@ -1,0 +1,11 @@
+syntax = "proto3";
+package compatibility;
+
+// descriptor.proto is omitted from PHP metadata. Public dependency indexes must
+// still be valid after that filtering (the historical public_dep regression).
+import "google/protobuf/descriptor.proto";
+import public "google/protobuf/timestamp.proto";
+
+message PublicDependency {
+  google.protobuf.Timestamp created_at = 1;
+}
