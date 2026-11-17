@@ -8,6 +8,7 @@ set -eu
 test "$(protoc --version)" = "libprotoc $PROTOC_VERSION"
 test "$(protoc-gen-go --version)" = "protoc-gen-go $GO_PROTOBUF_VERSION"
 test "$(protoc-gen-go-grpc --version)" = "protoc-gen-go-grpc ${GO_GRPC_VERSION#v}"
+test "$(protoc-gen-php-grpc --version)" = "php-grpc-server-protobuf-plugin ${PHP_GRPC_SERVER_VERSION#v}"
 
 # 全部输出写入容器临时目录，退出时自动清理，不依赖宿主机已有生成文件。
 work_dir=$(mktemp -d)
@@ -54,6 +55,24 @@ test -s "$work_dir/streaming/cpp/streaming.grpc.pb.cc"
 test -s "$work_dir/streaming/php/Compatibility/StreamingClient.php"
 test -s "$work_dir/streaming/python/streaming_pb2_grpc.py"
 test -s "$work_dir/streaming/ruby/streaming_services_pb.rb"
+# PHP 服务端接口另行验证四类 RPC；官方原生 PHP 插件只生成客户端。
+mkdir -p "$work_dir/streaming/php-server"
+protoc -I /opt/docker-protoc/test/fixtures -I /usr/local/include \
+    --php-grpc_out="$work_dir/streaming/php-server" streaming.proto
+python3 - "$work_dir/streaming/php-server/Compatibility/StreamingInterface.php" <<'PY'
+import pathlib
+import re
+import sys
+source = pathlib.Path(sys.argv[1]).read_text()
+assert re.search(r'public function Unary\([^)]*\$request\): StreamReply;', source), source
+for signature in (
+    'public function Upload(\\GRpcStream $request): StreamReply;',
+    'public function Download(StreamRequest $request): iterable;',
+    'public function Chat(\\GRpcStream $request): iterable;',
+):
+    assert signature in source, signature
+assert 'iterable<StreamReply>' in source, source
+PY
 # 验证 OpenAPI 不是空 JSON：未注解的示例 RPC 应拥有对应 HTTP 路径。
 python3 - "$work_dir/out/go/helloworld.swagger.json" <<'PY'
 import json

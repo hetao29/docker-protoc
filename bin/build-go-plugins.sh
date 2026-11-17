@@ -16,7 +16,7 @@ go install -ldflags='-s -w' "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-ge
 go install -ldflags='-s -w' "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@$GRPC_GATEWAY_VERSION"
 # Markdown/HTML 协议文档生成器，提供 --doc_out 和 --doc_opt。
 go install -ldflags='-s -w' "github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@$PROTOC_GEN_DOC_VERSION"
-# 项目使用的 PHP 服务端接口插件没有新的稳定发行，按锁定的上游提交重新编译。
-go install -ldflags='-s -w' "github.com/hetao29/php-grpc-server-protobuf-plugin@$PHP_GRPC_SERVER_COMMIT"
+# PHP 服务端接口插件 2.x 使用 /v2 模块路径，按锁定的稳定版本安装。
+go install -ldflags='-s -w' "github.com/hetao29/php-grpc-server-protobuf-plugin/v2@$PHP_GRPC_SERVER_VERSION"
 # go install 使用模块名作为文件名；重命名为消费工程原有的 protoc 插件名称。
 mv "$GOBIN/php-grpc-server-protobuf-plugin" "$GOBIN/protoc-gen-php-grpc"

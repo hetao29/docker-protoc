@@ -7,6 +7,7 @@
 
 本项目将 protoc、多语言 protobuf/gRPC 生成器及协议文档插件封装为 Docker 镜像，
 镜像仓库为 `hetao29/docker-protoc`，当前支持 Linux x86_64。
+当前镜像发布标签为 `36.2.1` / `latest`，对应 protoc 36.2 与 PHP 服务端插件 2.0.0。
 支持 Go、PHP、Dart、C++、JavaScript、gRPC-Web、TypeScript、Python、Ruby、Java、Kotlin，
 另提供 OpenAPI v2、Markdown 和 HTML 输出。项目没有业务服务和数据库。
 
@@ -62,7 +63,8 @@
 2026-11-16 核对的稳定版：protoc 36.2；gRPC 1.84.3；Go protobuf v1.36.12；
 Go gRPC v1.6.2；gateway/OpenAPI v2.33.0；文档插件 v1.5.1；Dart SDK 3.14.0 / 插件 25.1.0；
 Java gRPC 1.85.1；Kotlin gRPC 1.5.0；JS 4.0.3；gRPC-Web/TypeScript 2.1.1。
-PHP 服务端插件从上游提交 `4519f359a51edcbdb0294f2d5325e363800daab3` 构建。
+PHP 服务端插件于 2026-11-17 更新为稳定版 2.0.0，从 Go 模块
+`github.com/hetao29/php-grpc-server-protobuf-plugin/v2@2.0.0` 构建；上游实际标签不带 `v`。
 各版本的官方来源链接见 README；后续更新需重新核对官方稳定发行。
 
 - “最新”按已发布的稳定版本解释；不自动引入 RC、nightly 或 Maven 的不透明快照版本。
@@ -86,11 +88,11 @@ Makefile 默认 `DOCKER=sudo docker`、`IMAGE=hetao29/docker-protoc:latest`；�
 全部操作目标已声明 `.PHONY`。普通 `make` 等同于 `make test`，执行实际生成验证。
 
 ```bash
-make build IMAGE=hetao29/docker-protoc:36.2
-make test IMAGE=hetao29/docker-protoc:36.2
-make versions IMAGE=hetao29/docker-protoc:36.2
-make all IMAGE=hetao29/docker-protoc:36.2
-make typescript IMAGE=hetao29/docker-protoc:36.2
+make build IMAGE=hetao29/docker-protoc:36.2.1
+make test IMAGE=hetao29/docker-protoc:36.2.1
+make versions IMAGE=hetao29/docker-protoc:36.2.1
+make all IMAGE=hetao29/docker-protoc:36.2.1
+make typescript IMAGE=hetao29/docker-protoc:36.2.1
 make -n php
 ```
 
@@ -109,6 +111,8 @@ make -n php
 - 修改前检查 `git status`，保留已有修改与未跟踪文件，不覆盖用户未提交工作。
 - Shell 改动先运行 `sh -n bin/*.sh`（逐个文件检查）；文档/源码使用 `git diff --check`。
 - 构建执行 `smoke-test.sh`，通过运行生成器检查实际依赖加载和关键产物，不能仅检查文件存在于旧样例目录。
+- PHP 服务端插件须通过 `--version` 核对锁定版本，并使用 streaming fixture 验证
+  unary、客户端流、服务端流和双向流签名；配套 PHP 运行库为 2.0.0。
 - 原生 gRPC 的私有 libprotoc 裁剪通过 CMake 延迟钩子实现；仅构建四个插件目标，
   不在该构建目录编译完整上游 protoc。新增依赖命名辅助时须核对链接和 proto2/流式 RPC 回归。
 - `make test` 重新运行同一套生成检查，使用临时目录并自动清理，不修改宿主机生成文件。

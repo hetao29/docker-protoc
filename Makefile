@@ -5,8 +5,8 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 DOCKER ?= sudo docker
 # IMAGE：构建、运行和直接推送所用的完整镜像名。
 IMAGE ?= hetao29/docker-protoc:latest
-# VERSION：发布标签，当前采用 protoc 版本号；各插件的独立版本见 toolchain.env。
-VERSION ?= 36.2
+# VERSION：镜像发布标签；36.2.1 对应 protoc 36.2 + PHP 服务端插件 2.0.0。
+VERSION ?= 36.2.1
 # REPOSITORY：push-tag 的目标仓库，与 IMAGE 的源镜像名称可以不同。
 REPOSITORY ?= hetao29/docker-protoc
 # 临时容器退出后自动删除；工程以相同绝对路径挂载，并设置一致的容器工作目录。

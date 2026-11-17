@@ -4,10 +4,13 @@
 支持 Go、PHP、Dart、C++、JavaScript、gRPC-Web、TypeScript、Python、Ruby、Java、Kotlin，
 以及 OpenAPI v2、Markdown 和 HTML 文档生成。
 
+当前镜像发布标签为 `36.2.1` 和 `latest`，包含 protoc 36.2 与 PHP 服务端接口插件 2.0.0；镜像标签与各工具版本分别维护。
+
 ## 稳定版本
 
 以下为 **2026-11-16 核对的最新稳定版本**，统一锁定在 `toolchain.env`。
 构建不会自动追随 `latest`、RC 或开发快照；升级时更新版本及归档校验值。
+PHP 服务端接口插件于 2026-11-17 单独更新至 2.0.0，其余组件版本保持不变。
 
 | 组件 / 语言 | 版本 | 官方来源 |
 | --- | --- | --- |
@@ -21,11 +24,13 @@
 | Kotlin gRPC 插件 | 1.5.0 | [Maven metadata](https://repo.maven.apache.org/maven2/io/grpc/protoc-gen-grpc-kotlin/maven-metadata.xml) |
 | JavaScript protoc-gen-js | 4.0.3 | [protobuf-javascript](https://github.com/protocolbuffers/protobuf-javascript/releases/tag/v4.0.3) |
 | gRPC-Web / TypeScript 生成器 | 2.1.1 | [grpc-web](https://github.com/grpc/grpc-web/releases/tag/2.1.1) |
-| PHP 服务端接口插件 | 上游提交 `4519f359a51edcbdb0294f2d5325e363800daab3` | [源码](https://github.com/hetao29/php-grpc-server-protobuf-plugin/tree/4519f359a51edcbdb0294f2d5325e363800daab3) |
+| PHP 服务端接口插件 | 2.0.0 | [源码与手册](https://github.com/hetao29/php-grpc-server-protobuf-plugin/tree/2.0.0) |
 | Markdown / HTML 文档插件 | v1.5.1 | [protoc-gen-doc](https://github.com/pseudomuto/protoc-gen-doc/releases) |
 
-protoc 36.2 已是最新稳定版；37.0-rc2 是预发布版。PHP 服务端插件没有新的稳定发行，
-因此从当前上游提交重新编译，保留原有服务端接口生成方式。
+protoc 36.2 已是本次工具链核对的稳定版；37.0-rc2 是预发布版。
+PHP 服务端插件从 `github.com/hetao29/php-grpc-server-protobuf-plugin/v2@2.0.0` 构建，
+支持 unary、服务端流、客户端流和双向流，配套 PHP 运行库为 2.0.0。
+上游 Git 标签实际为 `2.0.0`，不是 `v2.0.0`；安装时使用实际标签，不追随分支。
 Java/Kotlin 的消息生成器随 protoc 更新，gRPC 插件另行更新。
 
 ## 构建与验证
@@ -39,18 +44,19 @@ Java/Kotlin 的消息生成器随 protoc 更新，gRPC 插件另行更新。
 下载的 protoc、Dart SDK、Java/Kotlin 插件、JS/Web 插件及 gRPC/构建依赖源码均检查 SHA-256。
 
 ```bash
-make build IMAGE=hetao29/docker-protoc:36.2
-make versions IMAGE=hetao29/docker-protoc:36.2
-make test IMAGE=hetao29/docker-protoc:36.2
+make build IMAGE=hetao29/docker-protoc:36.2.1
+make versions IMAGE=hetao29/docker-protoc:36.2.1
+make test IMAGE=hetao29/docker-protoc:36.2.1
 ```
 
 构建最后会实际生成所有语言、TypeScript 声明、OpenAPI 和文档，检查关键产物，
 并生成含 `import public` 的 PHP 回归样例。`make test` 可单独重跑这些检查，
 不会改写宿主机的生成样例。生成成功不等于消费工程的编译和运行时验证通过。
+构建还核对 PHP 服务端插件的 `--version` 输出，并检查四种 RPC 的接口签名。
 资源较少时可直接构建并限制 C++ 编译并发：
 
 ```bash
-sudo docker build --build-arg BUILD_JOBS=1 -t hetao29/docker-protoc:36.2 .
+sudo docker build --build-arg BUILD_JOBS=1 -t hetao29/docker-protoc:36.2.1 .
 ```
 
 Dart SDK 默认从 Google 官方归档下载。网络受限时可添加
@@ -66,11 +72,11 @@ GitHub release 归档的下载前缀还可通过 `GITHUB_DOWNLOAD_BASE_URL` 覆�
 每个目标会自动建立输出目录，`DOCKER` 和 `IMAGE` 可以覆盖：
 
 ```bash
-make all IMAGE=hetao29/docker-protoc:36.2
-make php IMAGE=hetao29/docker-protoc:36.2
-make dart java js typescript IMAGE=hetao29/docker-protoc:36.2
+make all IMAGE=hetao29/docker-protoc:36.2.1
+make php IMAGE=hetao29/docker-protoc:36.2.1
+make dart java js typescript IMAGE=hetao29/docker-protoc:36.2.1
 # 已有 Docker 权限时可不使用 sudo
-make typescript DOCKER=docker IMAGE=hetao29/docker-protoc:36.2
+make typescript DOCKER=docker IMAGE=hetao29/docker-protoc:36.2.1
 ```
 
 | 目标 | 输出 |
@@ -109,12 +115,16 @@ php -n test/php-runtime.php test/out/php /path/to/vendor/autoload.php /path/to/g
 
 ```bash
 mkdir -p proto_generated
-sudo docker run --rm -v "$PWD:$PWD" -w "$PWD" hetao29/docker-protoc:36.2 protoc \
+sudo docker run --rm -v "$PWD:$PWD" -w "$PWD" hetao29/docker-protoc:36.2.1 protoc \
   -I proto/ -I . --php_out=proto_generated --grpc_out=proto_generated \
   --plugin=protoc-gen-grpc=/usr/bin/grpc_php_plugin proto/helloworld.proto
 ```
 
 PHP 服务端接口生成时，将插件路径替换为 `/usr/bin/protoc-gen-php-grpc`。
+镜像内版本可用 `docker run --rm hetao29/docker-protoc:36.2.1 protoc-gen-php-grpc --version`
+核对，应输出 `php-grpc-server-protobuf-plugin 2.0.0`。
+客户端流参数为 `\GRpcStream`，服务端流返回 `iterable`；运行时使用 PHP 库 2.0.0
+的 `GRpcServer::serve()` 及匹配的 Swoole 流式传输扩展，JSON 仍仅支持 unary。
 
 旧编译器生成 PHP 元数据时可能调整依赖列表却保留原 public/weak 索引，导致 PHP C 扩展报
 `public_dep ... is out of range`。当前使用上游 protoc 36.2，不需要修改业务字段、编号、
@@ -130,5 +140,5 @@ PHP 服务端接口生成时，将插件路径替换为 `/usr/bin/protoc-gen-php
 运行这些目标前核对目标仓库和标签，不要将新工具链重新发布为旧版本标签。
 
 ```bash
-make push-tag IMAGE=hetao29/docker-protoc:36.2 VERSION=36.2
+make push-tag IMAGE=hetao29/docker-protoc:36.2.1 VERSION=36.2.1
 ```
